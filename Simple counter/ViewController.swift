@@ -22,27 +22,42 @@ class ViewController: UIViewController {
         
         counterLabel.text = "\(counterNumber)"
         textViewField.isEditable = false
-        textViewField.text = "Action history:\n"
-        textViewField.font = UIFont.boldSystemFont(ofSize: 13)
+        textViewField.text = "Action history:\n\n"
+        textViewField.font = UIFont.boldSystemFont(ofSize: 9)
+    }
+    
+    private func convertDateIntoString(date: Date) -> String {
+        let converter = DateFormatter()
+        converter.dateFormat = "dd.MM.yyyy HH.mm.ss"
+        return converter.string(from: date)
+    }
+    
+    private func addActionHistory(action: String) -> Void {
+        let description = "\(convertDateIntoString(date: Date())) - \(action)\n"
+        textViewField.insertText(description)
     }
     
     @IBAction func plusButtonClicked(_ sender: UIButton) {
         counterNumber += 1
         counterLabel.text = "\(counterNumber)"
+        addActionHistory(action: "plus button clicked")
     }
     
     @IBAction func minusButtonClicked(_ sender: UIButton) {
-        counterNumber -= 1
-        counterLabel.text = "\(counterNumber)"
+        if counterNumber == 0 {
+            addActionHistory(action: "attempt to make counter value negative")
+            return
+        } else {
+            counterNumber -= 1
+            counterLabel.text = "\(counterNumber)"
+            addActionHistory(action: "minus button clicked")
+        }
     }
     
     @IBAction func dropCounterButtonClicked(_ sender: UIButton) {
         counterNumber = 0
         counterLabel.text = "\(counterNumber)"
+        addActionHistory(action: "drop button clicked")
     }
-    
-    
-    
-
 }
 
