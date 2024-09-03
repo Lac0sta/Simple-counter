@@ -22,8 +22,14 @@ class ViewController: UIViewController {
         
         counterLabel.text = "\(counterNumber)"
         textViewField.isEditable = false
-        textViewField.text = "Action history:\n\n"
-        textViewField.font = UIFont.boldSystemFont(ofSize: 9)
+        
+        let title = "Action history:\n\n"
+        let attributedTitle = NSMutableAttributedString(
+            string: title,
+            attributes: [.font: UIFont.boldSystemFont(ofSize: 12)]
+        )
+        
+        textViewField.attributedText = attributedTitle
     }
     
     private func convertDateIntoString(date: Date) -> String {
@@ -34,7 +40,18 @@ class ViewController: UIViewController {
     
     private func addActionHistory(action: String) -> Void {
         let description = "\(convertDateIntoString(date: Date())) - \(action)\n"
-        textViewField.insertText(description)
+        
+        let attributedDescription = NSAttributedString(
+            string: description,
+            attributes: [.font: UIFont.systemFont(ofSize: 10)]
+        )
+        
+        let updatedText = NSMutableAttributedString(attributedString: textViewField.attributedText)
+        updatedText.append(attributedDescription)
+        textViewField.attributedText = updatedText
+        
+        let range = NSMakeRange(textViewField.text.count - 1, 1)
+        textViewField.scrollRangeToVisible(range)
     }
     
     @IBAction func plusButtonClicked(_ sender: UIButton) {
